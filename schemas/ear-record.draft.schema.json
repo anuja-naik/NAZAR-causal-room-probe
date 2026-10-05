@@ -1,0 +1,82 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "NAZAR draft Wi-Fi Ear flow-bin record",
+  "description": "Draft only. A possible approximately 100 ms per-flow metadata bin for phone-side analysis. This is not a frozen wire protocol and contains no payload data.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "session_id",
+    "bin_start_monotonic_us",
+    "bin_duration_ms",
+    "channel",
+    "flow_id",
+    "direction",
+    "frame_count",
+    "bytes_total",
+    "rssi_mean_dbm",
+    "retry_frames",
+    "dropped_frame_count"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "nazar-ear-bin-draft-0"
+    },
+    "session_id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Ephemeral probe-session identifier; must not encode a room/person identity."
+    },
+    "bin_start_monotonic_us": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Monotonic timestamp in microseconds from a documented device clock; cross-device mapping is not specified."
+    },
+    "bin_duration_ms": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 1000,
+      "default": 100,
+      "description": "Proposed default is approximately 100 ms; final bin width requires E04 validation."
+    },
+    "channel": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Observed 802.11 channel; channel-plan validation is outside this schema."
+    },
+    "flow_id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Opaque session-scoped flow identifier. Any raw transmitter/receiver address handling must be documented and minimized."
+    },
+    "direction": {
+      "enum": ["uplink", "downlink", "unknown"]
+    },
+    "frame_count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "bytes_total": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Sum of observed frame lengths in this flow/bin; no payload bytes or content."
+    },
+    "rssi_mean_dbm": {
+      "oneOf": [
+        { "type": "number", "minimum": -127, "maximum": 0 },
+        { "type": "null" }
+      ],
+      "description": "Mean RSSI for observed frames, or null when the bin has no measurement."
+    },
+    "retry_frames": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Count of frames marked as retries in this bin."
+    },
+    "dropped_frame_count": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Capture/drop count for interpreting missing observations; exact firmware semantics remain open."
+    }
+  }
+}

@@ -1,0 +1,26 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.env
+
+# Test / tooling output
+.pytest_cache/
+.coverage
+htmlcov/
+*.log
+
+# Local experiment data: keep only reviewed, consented, documented data in Git
+experiments/raw/
+experiments/private/
+*.pcap
+*.pcapng
+*.mp4
+*.mov
+*.jpg
+*.jpeg
+*.png
+
+# Local output from synthetic/demo tooling
+synthetic-output/

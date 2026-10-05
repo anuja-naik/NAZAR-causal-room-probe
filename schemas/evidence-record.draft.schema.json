@@ -1,0 +1,107 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "NAZAR draft evidence-chain envelope",
+  "description": "Draft record/envelope only. No signature field or claim of provenance is defined here; canonicalization and signature rules must be frozen before cross-device use.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "sequence", "previous_hash", "record", "record_hash"],
+  "properties": {
+    "schema_version": {
+      "const": "nazar-evidence-chain-draft-0"
+    },
+    "sequence": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "previous_hash": {
+      "oneOf": [
+        { "type": "null" },
+        { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+      ]
+    },
+    "record": {
+      "$ref": "#/$defs/evidenceRecord"
+    },
+    "record_hash": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$",
+      "description": "SHA-256 of the canonical envelope body excluding record_hash; see docs/evidence-format.md."
+    }
+  },
+  "$defs": {
+    "evidenceRecord": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "room_id",
+        "timestamp_utc",
+        "stimulus_hash",
+        "flow_id",
+        "statistical_result",
+        "second_round",
+        "optical_candidates",
+        "region",
+        "coverage",
+        "software_version",
+        "model_hash",
+        "device_metadata"
+      ],
+      "properties": {
+        "room_id": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Use a non-identifying session/room token; do not store a precise address."
+        },
+        "timestamp_utc": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "stimulus_hash": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "flow_id": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Session-scoped identifier; not a persistent hardware address."
+        },
+        "statistical_result": {
+          "type": "object",
+          "description": "Exact metric/field semantics are to be frozen with the Finale detector."
+        },
+        "second_round": {
+          "type": "object",
+          "description": "Second fresh challenge outcome and its stimulus reference; exact semantics are to be frozen."
+        },
+        "optical_candidates": {
+          "type": "array",
+          "items": { "type": "object" },
+          "description": "Candidate summaries only; avoid embedding room video or unnecessary images."
+        },
+        "region": {
+          "type": "object",
+          "description": "Approximate region and uncertainty, not a centimeter-level location."
+        },
+        "coverage": {
+          "type": "object",
+          "description": "What was inspected and what remains uncertain/untested."
+        },
+        "software_version": {
+          "type": "string",
+          "minLength": 1
+        },
+        "model_hash": {
+          "oneOf": [
+            { "type": "null" },
+            { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+          ],
+          "description": "Null if no model was used; a hash is not evidence of model validity."
+        },
+        "device_metadata": {
+          "type": "object",
+          "description": "Minimum device metadata needed to reproduce/interpret the run; avoid personal identifiers."
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,1 @@
+experiment_id,protocol_revision,run_id,date_local,operator_role,setup_id,phone_model,os_build,ear_board,firmware_commit,camera_model,network_condition,stimulus_id_or_hash,bin_ms,trial_duration_s,replicate_index,condition,raw_data_ref,analysis_commit,result_summary,deviations,privacy_review,live_replay_or_synthetic
